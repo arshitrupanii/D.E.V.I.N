@@ -1,4 +1,3 @@
-import Usermodel from '../models/user.model.js';
 import * as Userservices from '../services/user.service.js';
 import { validationResult } from 'express-validator';
 
@@ -13,7 +12,7 @@ export const createcontroller = async (req, res) => {
 
     try {
         const user = await Userservices.createUser(req.body.email, req.body.password);
-        const token = await Usermodel.generateAuthToken();
+        const token = user.generateAuthToken();
         res.status(201).json({user, token});
     }
 
