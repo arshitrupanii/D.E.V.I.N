@@ -24,23 +24,24 @@ export const createcontroller = async (req, res) => {
 }
 
 export const logincontroller = async (req, res) => {
-    const error = ExpressValidator(req)
+    const error = validationResult(req)
 
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() })
     }
 
     try {
-        const { email, body } = req.body
+        const { email, password } = req.body
 
-        const user = await Usermodel.findOne({ email })
+        const user = await Usermodel.findOne({ email }).select("+password")
 
         if (!user) {
             return res.status(401).json({
                 error: "unable to login incorrect email address...."
             })
         }
-        
+    
+
         const isMatch = await Usermodel.comparePassword(password)
         
         if (!isMatch) {
@@ -55,6 +56,7 @@ export const logincontroller = async (req, res) => {
     } 
     
     catch (error) {
-        return res.status(400).sent(error.message)
+        console.log(error)
+        return res.status(400).send(error.message)
     }
 }
