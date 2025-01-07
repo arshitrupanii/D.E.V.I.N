@@ -11,5 +11,9 @@ router.post('/user',
     Usercontroller.createcontroller 
 );
 
+router.post('/login', 
+    body('email').isEmail()
+)
+
 
 export default router;
